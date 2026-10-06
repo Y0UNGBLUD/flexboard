@@ -190,6 +190,7 @@ onBeforeUnmount(() => {
   position: absolute;
   overflow: hidden;
   touch-action: none;
+  border: 1px solid #ccc;
 }
 
 .flexboard__divider {

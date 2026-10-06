@@ -8,6 +8,7 @@
 .flexboard__panel {
   box-sizing: border-box;
   overflow: hidden;
+  border: 1px solid #ccc;
 }
 
 .flexboard__divider {
