@@ -281,6 +281,8 @@ This keeps layout manipulation independent from React or Vue.
 const next = addPanelToLayout(layout, "panel-c");
 ```
 
+`addPanelToLayout()` wraps the current root layout in a new horizontal split and appends the new panel as its second child.
+
 ### Insert near another panel
 
 ```ts
@@ -556,4 +558,4 @@ The API may change before the first stable release.
 
 ## License
 
-ISC
+MIT
