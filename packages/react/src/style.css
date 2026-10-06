@@ -1,0 +1,34 @@
+.flexboard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.flexboard__panel {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.flexboard__divider {
+  box-sizing: border-box;
+  touch-action: none;
+  user-select: none;
+}
+
+.flexboard__drop-preview {
+  box-sizing: border-box;
+
+  background: var(--flexboard-preview-background, rgb(0 120 255 / 15%));
+
+  border: var(--flexboard-preview-border, 2px solid rgb(0 120 255 / 50%));
+
+  z-index: var(--flexboard-preview-z-index, 10);
+}
+.flexboard__divider--h {
+  cursor: col-resize;
+}
+
+.flexboard__divider--v {
+  cursor: row-resize;
+}

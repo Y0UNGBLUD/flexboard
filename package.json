@@ -1,16 +1,12 @@
 {
   "name": "flexboard",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "build": "pnpm -r build",
-    "test": "pnpm -r test:run",
-    "typecheck": "pnpm -r typecheck"
+    "build": "pnpm --filter \"@flexboard/*\" --if-present build",
+    "test": "pnpm --filter \"@flexboard/*\" --if-present test:run",
+    "typecheck": "pnpm --filter \"@flexboard/*\" --if-present typecheck",
+    "check": "pnpm typecheck && pnpm test && pnpm build",
+    "examples:build": "pnpm --filter \"./examples/**\" --if-present build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
@@ -20,14 +16,21 @@
   },
   "packageManager": "pnpm@12.9.1",
   "type": "module",
-  "private": "true",
+  "private": true,
   "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
     "@vitejs/plugin-vue": "^6.0.9",
     "@vue/test-utils": "^2.5.1",
     "jsdom": "^30.1.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "typescript": "^5.9.3",
     "vite": "^8.3.2",
     "vite-plugin-css-injected-by-js": "^5.0.2",
+    "vite-plugin-dts": "^5.1.2",
     "vitest": "^5.0.3",
     "vue-tsc": "^3.3.12"
   }
