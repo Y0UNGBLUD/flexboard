@@ -315,7 +315,7 @@ importers:
         specifier: workspace:*
         version: link:../core
       vue:
-        specifier: ^3.5.43
+        specifier: ^3.3.0 || ^3.4.0 || ^3.5.0
         version: 3.5.43(typescript@5.9.3)
 
 packages:

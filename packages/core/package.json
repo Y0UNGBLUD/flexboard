@@ -1,7 +1,7 @@
 {
   "name": "@flexboard/core",
   "version": "0.1.0",
-  "description": "Headless split-layout engine for FlexBoard",
+  "description": "Headless recursive split-layout engine for FlexBoard",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -20,5 +20,13 @@
     "test": "vitest",
     "test:run": "vitest run"
   },
+  "keywords": [
+    "layout",
+    "split-layout",
+    "panel",
+    "drag-and-drop",
+    "headless",
+    "typescript"
+  ],
   "license": "MIT"
 }
