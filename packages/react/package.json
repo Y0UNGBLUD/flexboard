@@ -36,5 +36,10 @@
     "drag-and-drop",
     "dashboard"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Y0UNGBLUD/flexboard.git",
+    "directory": "packages/react"
+  },
   "license": "MIT"
 }

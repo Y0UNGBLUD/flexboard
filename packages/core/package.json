@@ -28,5 +28,10 @@
     "headless",
     "typescript"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Y0UNGBLUD/flexboard.git",
+    "directory": "packages/core"
+  },
   "license": "MIT"
 }
