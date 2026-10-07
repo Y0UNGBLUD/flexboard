@@ -12,6 +12,16 @@ Build interactive layouts where users can resize, move, add, and remove panels d
   />
 </p>
 
+<p align="center">
+  <a href="https://y0ungblud.github.io/flexboard/">
+    <strong>Try the Live Demo →</strong>
+  </a>
+</p>
+
+<p align="center">
+  Experience FlexBoard in action and explore how the recursive layout tree changes in real time.
+</p>
+
 ## Features
 
 - 🧩 **Recursive split layouts** — Build deeply nested layouts from a simple tree structure.
