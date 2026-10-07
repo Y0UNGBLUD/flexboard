@@ -48,7 +48,7 @@ The core package owns the layout model and operations, while the React and Vue p
 ### React
 
 ```bash
-pnpm add @flexboard/react
+npm install @flexboard/react
 ```
 
 ```tsx
@@ -58,7 +58,7 @@ import { FlexBoard, type LayoutNode } from "@flexboard/react";
 ### Vue
 
 ```bash
-pnpm add @flexboard/vue
+npm install @flexboard/vue
 ```
 
 ```ts
