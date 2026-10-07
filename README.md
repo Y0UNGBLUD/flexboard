@@ -1,62 +1,78 @@
 # FlexBoard
 
-A headless, recursive panel layout engine for building resizable and draggable workspace UIs.
+A framework-agnostic recursive split-layout engine with adapters for React and Vue.
 
-FlexBoard represents layouts as a recursive tree rather than a flat grid. It provides a framework-agnostic TypeScript core with Vue and React adapters for rendering interactive panel layouts.
+Build interactive layouts where users can resize, move, add, and remove panels dynamically.
+
+<p align="center">
+  <img
+    src="./docs/assets/flexboard-demo.gif"
+    alt="FlexBoard demo"
+    width="100%"
+  />
+</p>
 
 ## Features
 
-- Recursive split-tree layout model
-- Horizontal and vertical panel splitting
-- Resizable dividers
-- Drag-and-drop panel rearrangement
-- Drop preview
-- External drag-and-drop support
-- Framework-agnostic TypeScript core
-- Vue 3 adapter
-- React adapter
-- Headless panel rendering
-- Customizable panel UI
-- TypeScript support
+- 🧩 **Recursive split layouts** — Build deeply nested layouts from a simple tree structure.
+- ↔️ **Resizable panels** — Resize panels interactively using draggable dividers.
+- 🖱️ **Drag and drop** — Move panels around the layout with drop previews.
+- ➕ **Dynamic panels** — Add and remove panels programmatically.
+- 🧠 **State preservation** — Surviving panel components retain their local state when the layout changes.
+- ⚛️ **React support** — Use FlexBoard through `@flexboard/react`.
+- 💚 **Vue support** — Use FlexBoard through `@flexboard/vue`.
+- 🧱 **Framework-agnostic core** — Layout calculations and tree operations live in a pure TypeScript package.
 
 ## Packages
 
-FlexBoard is organized as a monorepo with three main packages.
+FlexBoard is organized as a monorepo containing a framework-agnostic core and framework adapters.
+
+| Package            | Description                                |
+| ------------------ | ------------------------------------------ |
+| `@flexboard/core`  | Framework-agnostic recursive layout engine |
+| `@flexboard/react` | React adapter for FlexBoard                |
+| `@flexboard/vue`   | Vue adapter for FlexBoard                  |
 
 ```text
-@flexboard/core
-├─ layout tree
-├─ geometry calculation
-├─ resize
-├─ panel insertion / removal
-└─ drag-and-drop calculation
-
-@flexboard/vue
-└─ Vue adapter
-
-@flexboard/react
-└─ React adapter
+                    @flexboard/core
+                           │
+              ┌────────────┴────────────┐
+              │                         │
+      @flexboard/react          @flexboard/vue
 ```
 
-`@flexboard/core` contains the layout model and operations without depending on a UI framework.
+The core package owns the layout model and operations, while the React and Vue packages handle framework-specific rendering and interaction.
 
-The Vue and React packages translate the core layout into framework-specific components and interaction APIs.
+## Installation
 
-## Recursive Layout Model
+### React
 
-The central idea behind FlexBoard is `LayoutNode`.
+```bash
+pnpm add @flexboard/react
+```
 
-Instead of storing panels as a flat array of rows and columns, a layout is represented as a recursive binary tree.
+```tsx
+import { FlexBoard, type LayoutNode } from "@flexboard/react";
+```
 
-A node is either:
+### Vue
 
-- an `actual` node representing a panel
-- a `split` node containing two child nodes
-
-For example:
+```bash
+pnpm add @flexboard/vue
+```
 
 ```ts
-const layout: LayoutNode = {
+import { FlexBoard, type LayoutNode } from "@flexboard/vue";
+```
+
+You normally only need to install the adapter for your framework. `@flexboard/core` is installed automatically as a dependency.
+
+## Quick Start
+
+A FlexBoard layout is represented by a recursive `LayoutNode`.
+
+```ts
+const initialLayout: LayoutNode = {
   type: "split",
   id: "root",
   orientation: "H",
@@ -80,115 +96,34 @@ const layout: LayoutNode = {
 
     second: {
       type: "actual",
-      id: "news",
+      id: "info",
     },
   },
 };
 ```
 
-Conceptually, the tree looks like this:
+This tree represents a layout like:
 
 ```text
-                 split(H)
-                /        \
-            chart        split(V)
-                        /        \
-                    orders       news
+┌──────────────────────┬────────────────┐
+│                      │     orders     │
+│        chart         ├────────────────┤
+│                      │      info      │
+└──────────────────────┴────────────────┘
 ```
-
-And produces a layout similar to:
-
-```text
-┌──────────────────────┬──────────────┐
-│                      │    orders    │
-│                      │              │
-│        chart         ├──────────────┤
-│                      │     news     │
-│                      │              │
-└──────────────────────┴──────────────┘
-```
-
-### Why a recursive tree?
-
-Each split only needs to describe:
-
-```text
-orientation
-split ratio
-first child
-second child
-```
-
-The children may themselves be another split.
-
-This makes arbitrarily nested layouts possible without introducing special concepts for rows, columns, or nesting depth.
-
-Layout calculation follows the same recursive structure:
-
-```text
-calculate current node
-        │
-        ├─ actual
-        │    └─ emit panel rectangle
-        │
-        └─ split
-             ├─ calculate child regions
-             ├─ traverse first child
-             └─ traverse second child
-```
-
-The same tree structure also makes operations such as panel insertion, removal, movement, and nested divider resizing natural recursive operations.
-
-## Installation
-
-Install the adapter for your framework together with the core package when core layout operations are needed.
 
 ### React
-
-```bash
-pnpm add @flexboard/react @flexboard/core
-```
-
-### Vue
-
-```bash
-pnpm add @flexboard/vue @flexboard/core
-```
-
-## React
 
 ```tsx
 import { useState } from "react";
 
 import { FlexBoard, type LayoutNode } from "@flexboard/react";
 
-const initialLayout: LayoutNode = {
-  type: "split",
-  id: "root",
-  orientation: "H",
-  size: 0.5,
-
-  first: {
-    type: "actual",
-    id: "panel-a",
-  },
-
-  second: {
-    type: "actual",
-    id: "panel-b",
-  },
-};
-
 export default function App() {
   const [layout, setLayout] = useState<LayoutNode>(initialLayout);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: 600,
-      }}
-    >
+    <div style={{ width: "100%", height: "600px" }}>
       <FlexBoard
         layout={layout}
         onLayoutChange={setLayout}
@@ -199,23 +134,7 @@ export default function App() {
 }
 ```
 
-FlexBoard is a controlled component.
-
-```text
-layout
-   ↓
-FlexBoard
-   ↓
-user interaction
-   ↓
-onLayoutChange(nextLayout)
-   ↓
-application state
-```
-
-Your application owns the `LayoutNode`; FlexBoard renders and interacts with it.
-
-## Vue
+### Vue
 
 ```vue
 <script setup lang="ts">
@@ -223,277 +142,181 @@ import { ref } from "vue";
 
 import { FlexBoard, type LayoutNode } from "@flexboard/vue";
 
-const layout = ref<LayoutNode>({
-  type: "split",
-  id: "root",
-  orientation: "H",
-  size: 0.5,
-
-  first: {
-    type: "actual",
-    id: "panel-a",
-  },
-
-  second: {
-    type: "actual",
-    id: "panel-b",
-  },
-});
+const layout = ref<LayoutNode>(initialLayout);
 </script>
 
 <template>
-  <div
-    style="
-      width: 100%;
-      height: 600px;
-    "
-  >
+  <div style="width: 100%; height: 600px">
     <FlexBoard v-model:layout="layout">
       <template #panel="{ id }">
-        <div>
-          {{ id }}
-        </div>
+        <div>{{ id }}</div>
       </template>
     </FlexBoard>
   </div>
 </template>
 ```
 
-## Core Operations
+## Recursive Layout Model
 
-Layout manipulation is provided by `@flexboard/core`.
+The main idea behind FlexBoard is that a layout is not represented as a fixed collection of rows and columns.
 
-For example:
+Instead, it is represented as a **recursive binary split tree**.
+
+There are two kinds of nodes:
 
 ```ts
-import {
-  addPanelToLayout,
-  insertPanelNear,
-  removePanel,
-} from "@flexboard/core";
+interface ActualNode {
+  type: "actual";
+  id: string;
+}
+
+interface SplitNode {
+  type: "split";
+  id: string;
+  orientation: "H" | "V";
+  first: LayoutNode;
+  second: LayoutNode;
+  size: number;
+}
+
+type LayoutNode = ActualNode | SplitNode;
 ```
 
-This keeps layout manipulation independent from React or Vue.
+An `ActualNode` represents a panel.
+
+A `SplitNode` divides its available area into two children, and each child can itself be another `SplitNode`.
+
+```text
+                    Split
+                   /     \
+              Panel       Split
+                         /     \
+                    Panel       Split
+                               /     \
+                          Panel       Panel
+```
+
+Because the structure is recursive, FlexBoard can represent arbitrarily nested panel layouts using the same small set of primitives.
+
+The same tree is used as the basis for:
+
+- layout geometry calculation
+- divider positioning
+- resizing
+- panel insertion
+- panel removal
+- panel movement
+- drag-and-drop targeting
+
+## Layout Operations
+
+Common tree operations are exposed through the framework packages as well as `@flexboard/core`.
 
 ### Add a panel
 
 ```ts
-const next = addPanelToLayout(layout, "panel-c");
+import { addPanelToLayout } from "@flexboard/react";
+
+setLayout((current) => addPanelToLayout(current, "new-panel"));
 ```
 
-`addPanelToLayout()` wraps the current root layout in a new horizontal split and appends the new panel as its second child.
-
-### Insert near another panel
+Vue:
 
 ```ts
-const next = insertPanelNear(layout, "panel-a", "panel-c", "right");
-```
+import { addPanelToLayout } from "@flexboard/vue";
 
-Insertion may fail when the target cannot be found, so handle the nullable result when necessary:
-
-```ts
-const next = insertPanelNear(layout, targetId, newPanelId, direction);
-
-layout = next ?? layout;
+layout.value = addPanelToLayout(layout.value, "new-panel");
 ```
 
 ### Remove a panel
 
+React:
+
 ```ts
-const next = removePanel(layout, "panel-a");
+import { removePanel } from "@flexboard/react";
+
+setLayout((current) => {
+  const next = removePanel(current, "orders");
+
+  return next ?? current;
+});
+```
+
+Vue:
+
+```ts
+import { removePanel } from "@flexboard/vue";
+
+const next = removePanel(layout.value, "orders");
 
 if (next) {
-  layout = next;
+  layout.value = next;
 }
 ```
 
-Applications can decide their own policy for the final remaining panel.
-
-## Divider Resize
-
-Split nodes contain a ratio:
+Additional tree operations are available for inserting and moving panels:
 
 ```ts
-{
-  type: "split",
-  orientation: "H",
-  size: 0.6,
-  // ...
-}
+insertPanelNear;
+movePanel;
 ```
-
-The divider can be resized interactively through the Vue and React adapters.
-
-The core remains responsible for calculating the updated split ratio while the adapters handle pointer events.
-
-## Internal Drag and Drop
-
-Panels can be rearranged by dragging them over another panel.
-
-FlexBoard determines the closest drop direction:
-
-```text
-       top
-        ↑
-        │
-left ← panel → right
-        │
-        ↓
-      bottom
-```
-
-A drop preview is rendered before the layout is changed.
-
-The actual tree operation is performed by the core layout engine.
-
-## External Drag and Drop
-
-FlexBoard also supports dragging application-defined items into the board.
-
-The adapter intentionally does not decide what the dragged item represents.
-
-Instead, it reports only the layout-related information:
-
-```ts
-interface ExternalDropEvent {
-  targetId: string;
-  direction: "left" | "right" | "top" | "bottom";
-}
-```
-
-This keeps external drag-and-drop headless.
-
-### React
-
-```tsx
-<FlexBoard
-  layout={layout}
-  onLayoutChange={setLayout}
-  externalDrop
-  onExternalDrop={(event) => {
-    // Create whatever panel your
-    // application needs here.
-  }}
-  renderPanel={({ id }) => <MyPanel id={id} />}
-/>
-```
-
-For example:
-
-```tsx
-function handleExternalDrop(event: ExternalDropEvent) {
-  setLayout((current) => {
-    const next = insertPanelNear(
-      current,
-      event.targetId,
-      createPanelId(),
-      event.direction,
-    );
-
-    return next ?? current;
-  });
-}
-```
-
-This means FlexBoard does not need to know whether the external item is a chart, order book, editor, terminal, or anything else.
-
-## Headless Panel Rendering
-
-FlexBoard manages layout and interaction, not application UI.
-
-In React:
-
-```tsx
-<FlexBoard
-  layout={layout}
-  onLayoutChange={setLayout}
-  renderPanel={({ id }) => <MyPanel id={id} />}
-/>
-```
-
-In Vue:
-
-```vue
-<FlexBoard v-model:layout="layout">
-  <template #panel="{ id }">
-    <MyPanel :id="id" />
-  </template>
-</FlexBoard>
-```
-
-The consumer owns the actual panel design and content.
-
-This makes FlexBoard suitable for interfaces such as:
-
-- dashboards
-- trading terminals
-- editors
-- monitoring tools
-- admin workspaces
-- developer tools
-
-## Styling
-
-Base FlexBoard styles are included automatically by the framework packages.
-
-Panel contents remain entirely controlled by the consumer.
-
-```tsx
-renderPanel={({ id }) => (
-  <div className="my-panel">
-    {id}
-  </div>
-)}
-```
-
-```css
-.my-panel {
-  width: 100%;
-  height: 100%;
-
-  padding: 16px;
-
-  background: white;
-}
-```
-
-FlexBoard's interaction styles can also be customized with CSS where needed.
 
 ## Architecture
 
-FlexBoard separates layout logic from framework integration.
+FlexBoard separates layout logic from framework rendering.
 
 ```text
-                    LayoutNode
-                        │
-                        ↓
-                @flexboard/core
-               /        |        \
-              /         |         \
-     calculate       mutate       DnD
-       layout         tree      detection
-              \         |         /
-               \        |        /
-                        ↓
-             framework adapters
-                /             \
-               ↓               ↓
-        @flexboard/vue   @flexboard/react
-               ↓               ↓
-           application     application
+┌─────────────────────────────────────────────┐
+│              React / Vue Adapter            │
+│                                             │
+│  Components · Hooks/Composables · Events   │
+└──────────────────────┬──────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────┐
+│              @flexboard/core                │
+│                                             │
+│  Tree Operations                            │
+│  Geometry Calculation                       │
+│  Drag & Drop Targeting                      │
+│  Divider Resizing                           │
+└─────────────────────────────────────────────┘
 ```
 
-The core package does not depend on Vue or React.
+`@flexboard/core` contains no React or Vue dependencies.
 
-Framework packages are responsible primarily for:
+The framework adapters consume the same layout engine, allowing both implementations to share the same layout behavior and data model.
 
-- DOM measurement
-- rendering
-- pointer events
-- drag events
-- translating interactions into core operations
+## Repository Structure
 
-This separation allows the same recursive layout engine to power multiple UI frameworks.
+```text
+flexboard/
+├── packages/
+│   ├── core/
+│   │   └── src/
+│   │       ├── dnd/
+│   │       ├── geometry/
+│   │       ├── resize/
+│   │       ├── tree/
+│   │       ├── types/
+│   │       └── utils/
+│   │
+│   ├── react/
+│   │   └── src/
+│   │       ├── components/
+│   │       ├── hooks/
+│   │       └── types/
+│   │
+│   └── vue/
+│       └── src/
+│           ├── components/
+│           ├── composables/
+│           └── types/
+│
+├── examples/
+├── package.json
+└── pnpm-workspace.yaml
+```
 
 ## Development
 
@@ -503,58 +326,23 @@ Install dependencies:
 pnpm install
 ```
 
-Run all package type checks:
+Run type checks:
 
 ```bash
 pnpm typecheck
 ```
 
-Run all tests:
+Run tests:
 
 ```bash
 pnpm test
 ```
 
-Build all library packages:
+Build all packages:
 
 ```bash
 pnpm build
 ```
-
-Run the complete package verification:
-
-```bash
-pnpm check
-```
-
-Build example applications:
-
-```bash
-pnpm examples:build
-```
-
-## Project Structure
-
-```text
-flexboard/
-├─ packages/
-│  ├─ core/
-│  ├─ vue/
-│  └─ react/
-│
-├─ examples/
-│  ├─ vue/
-│  └─ react/
-│
-├─ package.json
-└─ pnpm-workspace.yaml
-```
-
-## Status
-
-FlexBoard is currently under active development.
-
-The API may change before the first stable release.
 
 ## License
 

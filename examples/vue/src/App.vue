@@ -156,7 +156,7 @@ function handleExternalDrop(event: ExternalDropEvent): void {
         <p>Drag panels from the list into the board.</p>
       </div>
 
-      <button type="button" @click="addPanel">+ Add Panel</button>
+      <button type="button" @click="addPanel">➕ Add Panel</button>
     </header>
 
     <div class="playground">
@@ -198,7 +198,7 @@ function handleExternalDrop(event: ExternalDropEvent): void {
                 @pointerdown.stop
                 @click="removePanelById(id)"
               >
-                ×
+                ✖️
               </button>
             </div>
           </template>
@@ -238,7 +238,6 @@ function handleExternalDrop(event: ExternalDropEvent): void {
   padding: 10px 16px;
 
   border: 1px solid #ddd;
-  border-radius: 8px;
 
   background: white;
 
@@ -258,7 +257,7 @@ function handleExternalDrop(event: ExternalDropEvent): void {
   padding: 16px;
 
   border: 1px solid #ddd;
-  border-radius: 12px;
+  border-radius: 4px;
 
   background: white;
 }
@@ -284,7 +283,6 @@ function handleExternalDrop(event: ExternalDropEvent): void {
   padding: 12px 14px;
 
   border: 1px solid #ddd;
-  border-radius: 8px;
 
   background: #fafafa;
 
@@ -316,24 +314,21 @@ function handleExternalDrop(event: ExternalDropEvent): void {
   height: 650px;
 
   border: 1px solid #ccc;
-  border-radius: 12px;
 
   background: white;
 
   overflow: hidden;
+  padding: 10px;
 }
 
 .panel {
   position: relative;
-
   width: 100%;
   height: 100%;
-
   padding: 20px;
-
   border: 1px solid #ddd;
-
   background: #f8f8f8;
+  user-select: none;
 }
 
 .remove-button {
@@ -348,7 +343,6 @@ function handleExternalDrop(event: ExternalDropEvent): void {
   padding: 0;
 
   border: 1px solid #ddd;
-  border-radius: 6px;
 
   background: white;
 
