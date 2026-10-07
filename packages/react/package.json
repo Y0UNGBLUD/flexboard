@@ -1,6 +1,6 @@
 {
   "name": "@flexboard/react",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "React adapter for the FlexBoard recursive split-layout engine",
   "type": "module",
   "main": "./dist/index.js",
