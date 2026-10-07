@@ -23,6 +23,14 @@ export function Header({ onAddPanel, onResetLayout }: HeaderProps) {
         <button type="button" onClick={onResetLayout}>
           💫 Reset Layout
         </button>
+        <a
+          className="header__github"
+          href="https://github.com/Y0UNGBLUD/flexboard"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub ↗
+        </a>
       </div>
     </header>
   );

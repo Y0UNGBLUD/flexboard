@@ -45,18 +45,16 @@ const initialLayout: LayoutNode = {
 
 function App() {
   const [layout, setLayout] = useState<LayoutNode>(initialLayout);
-  const [nextPanelId, setNextPanelId] = useState(1);
   const [draggedPanelType, setDraggedPanelType] = useState<PanelType | null>(
     null,
   );
-  const [nextExternalPanelId, setNextExternalPanelId] = useState(1);
-
+  function createPanelId(type: PanelType) {
+    return `${type}-${crypto.randomUUID()}`;
+  }
   function handleAddPanel() {
-    const id = `info-${nextPanelId}`;
+    const id = createPanelId("info");
 
     setLayout((current) => addPanelToLayout(current, id));
-
-    setNextPanelId((current) => current + 1);
   }
 
   function handleRemovePanel(id: string) {
@@ -69,12 +67,11 @@ function App() {
 
   function handleResetLayout() {
     setLayout(initialLayout);
-    setNextPanelId(1);
   }
   function handleExternalDrop(event: ExternalDropEvent) {
     if (!draggedPanelType) return;
 
-    const panelId = `${draggedPanelType}-${nextExternalPanelId}`;
+    const panelId = createPanelId(draggedPanelType);
 
     setLayout((current) => {
       const next = insertPanelNear(
@@ -87,7 +84,6 @@ function App() {
       return next ?? current;
     });
 
-    setNextExternalPanelId((current) => current + 1);
     setDraggedPanelType(null);
   }
   return (

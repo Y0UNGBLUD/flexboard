@@ -81,6 +81,24 @@ button {
 
   cursor: pointer;
 }
+.header__github {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 8px 12px;
+
+  border: 1px solid #d1d6db;
+  border-radius: 8px;
+
+  color: #333d4b;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.header__github:hover {
+  background: #f2f4f6;
+}
 
 .demo__workspace {
   flex: 1;
