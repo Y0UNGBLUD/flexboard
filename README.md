@@ -6,7 +6,7 @@ Build interactive layouts where users can resize, move, add, and remove panels d
 
 <p align="center">
   <img
-    src="./docs/assets/flexboard-demo.gif"
+    src="./docs/assets/flexboard-demo-v2.gif"
     alt="FlexBoard demo"
     width="100%"
   />
